@@ -311,9 +311,10 @@ function dataCompleted(){
     
       button1.className = "actions-button1";
       button1.textContent= "Edit"
-
+      
       button1.addEventListener("click",(e)=>{
-        edit(e,element.Id);
+        edit(e,element.id);
+
       });
 
       let button2 = document.createElement("button");
@@ -323,14 +324,40 @@ function dataCompleted(){
       button2.addEventListener("click", (e) => {
         e.target.parentNode.parentNode.remove();
         eliminar(element.Id);
-        total--;
+        window.location = window.location
+
       });
+
+
+      if(element.estado==="completado"){
+        inputTask.setAttribute("checked", "completed")
+        total--;
+        let inputCheck =document.createElement("input");
+        div_space.insertAdjacentElement("afterbegin", inputCheck);
+  
+        let checkInput=document.createElement("input");
+        checkInput.type="checkbox"
+        console.log(checkInput)
+        div_space.insertAdjacentElement("afterbegin", checkInput);
+  
+        checkInput.addEventListener("click", (e)=>{
+          checkBlockEdit(e,element.Id)
+        })
+  
+        if(element.Validacion=="Active"){
+          button1.setAttribute("disabled","disabled");
+          inputCheck.setAttribute("placeholder",element.placeholder)
+        }
+      }
 
       let taskActive = document.getElementById("active");
       taskActive.addEventListener("click",taskActivesbtn );
-
+      
       let taskCompleted= document.getElementById("completed")
       taskCompleted.addEventListener("click",taskCompletedbtn );
+      taskCompleted
+      let allTask = document.getElementById("all")
+      allTask.addEventListener("click", allTaskFtn)
       //inserciones
       section.insertAdjacentElement("beforeend", divContainer);
       divContainer.insertAdjacentElement("beforeend", div_space);
