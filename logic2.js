@@ -2,10 +2,8 @@ let localArray = [];
 let total = 0;
 let validar = true;
 let changeText;
-totalObj = 0;
 let contadorId = 0;
 let idValue;
-let validationButtons = true
 function guardadoArray(tarea, id) {
   let nombreTarea = {
     Nombre: tarea,
@@ -72,7 +70,7 @@ function dataHtml() {
       button1.textContent= "Edit"
       
       button1.addEventListener("click",(e)=>{
-        edit(e,element.id);
+        edit(e,element.Id);
 
       });
 
@@ -91,6 +89,7 @@ function dataHtml() {
       if(element.estado==="completado"){
         inputTask.setAttribute("checked", "completed")
         total--;
+        //Input cuando el boton esta check
         let inputCheck =document.createElement("input");
         div_space.insertAdjacentElement("afterbegin", inputCheck);
   
@@ -101,8 +100,10 @@ function dataHtml() {
   
         checkInput.addEventListener("click", (e)=>{
           checkBlockEdit(e,element.Id)
+          window.location=window.location;
         })
-  
+        
+
         if(element.Validacion=="Active"){
           button1.setAttribute("disabled","disabled");
           inputCheck.setAttribute("placeholder",element.placeholder)
@@ -135,18 +136,17 @@ function checkBlockEdit(e,id){
     if(element.Id === id){
       element.Validacion ="Active"
       element.placeholder = input.value
-      window.location=window.location
       localSave()
     }
   })
 }
 function edit(e,id) {
   validar=false;
-  changeText= e.target.parentNode.parentNode.childNodes[0].childNodes[0];
+  changeText= e.target.parentNode.parentNode.childNodes[0].childNodes[1];
   let editTask= changeText.textContent;
   let getTask= document.getElementById("task")
   getTask.value=editTask;
-  idValue=Id;
+  idValue=id;
 }
 
 function editArray(){
@@ -156,15 +156,17 @@ function editArray(){
     alert("No se aceptan valores en blanco")
   }else{
     localArray.forEach(element =>{
-      if(element.Id==idValue){
+      if(element.Id===idValue){
         element.Nombre=getTask;
       localStorage.setItem("formulario", JSON.stringify(localArray));
       dataHtml();
       }
     })
+    formulario.reset();
   }
-  formulario.reset();
+ 
 }
+//Funcion Input tarea completada
 function checkTask(e,id){
   let check = e.checked;
   if(check){
@@ -172,33 +174,35 @@ function checkTask(e,id){
       if(element.Id==id){
         element.estado="completado"
         localStorage.setItem("formulario", JSON.stringify(localArray))
+        window.location = window.location
       }
     })
-    window.location = window.location
-    edit().break();
   }
   else if(check==false){
     localArray.forEach(element =>{
       if(element.Id==id){
         element.estado="active"
         localStorage.setItem("formulario", JSON.stringify(localArray))
+        window.location = window.location
       }
     })
-    window.location=window.location
   }
 }
+//Tareas Activas
 function taskActivesbtn(){
 let arrayActive=localArray.filter(element => element.estado=="active");
 localStorage.setItem("taskIncomplete", JSON.stringify(arrayActive));
 console.log(arrayActive)
 dataActives();
 }
+//Tareas completadas
 function taskCompletedbtn(){
   let arrayCompleted=localArray.filter(element => element.estado=="completado");
 localStorage.setItem("taskCompleted", JSON.stringify(arrayCompleted));
 console.log(arrayCompleted);
 dataCompleted();
 }
+// Tareas activas html
 function dataActives(){
   const section = document.getElementById("section3");
   arrayActive = JSON.parse(localStorage.getItem("taskIncomplete"));
@@ -270,6 +274,7 @@ function dataActives(){
     });
   }
 }
+// Tareas completadas Html
 function dataCompleted(){
   const section = document.getElementById("section3");
   let arrayCompleted = JSON.parse(localStorage.getItem("taskCompleted"));
@@ -342,6 +347,7 @@ function dataCompleted(){
   
         checkInput.addEventListener("click", (e)=>{
           checkBlockEdit(e,element.Id)
+          window.location=window.location;
         })
   
         if(element.Validacion=="Active"){
